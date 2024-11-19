@@ -18,19 +18,25 @@ Start-VM -Name "IT301Final"
 
 # Function to create users inside the VM
 function Create-UsersInVM {
+    #Arguments to add into the Invoke-Command
     param (
         [string]$VMName,
         [string]$BaseUsername,
         [string]$DefaultPassword,
         [int]$NumberOfUsers
     )
+
+#Admin Variable, needs to probably be used for every command that needs an Admin password
     $Admincredential = Get-Credential
+
+#For loop that iterates over the requested amount of users
     for ($i = 1; $i -le $NumberOfUsers; $i++) {
         $Username = "$BaseUsername$i"
         $Password = ConvertTo-SecureString $DefaultPassword -AsPlainText -Force
 
         # Command to create user inside the VM, need to work on this more nad it needs an admin password each time?
-        
+
+#Commands to actually submit with the Invoke-Command 
         $command = @"
         New-LocalUser -Name '$Username' -Password (ConvertTo-SecureString '$DefaultPassword' -AsPlainText -Force); `
         Add-LocalGroupMember -Group 'Users' -Member '$Username';
